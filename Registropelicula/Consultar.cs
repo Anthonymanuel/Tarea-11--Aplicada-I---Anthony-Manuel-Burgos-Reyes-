@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using BLL;
 
 namespace Registropelicula
 {
@@ -24,85 +25,43 @@ namespace Registropelicula
 
         private void BuscarButton_Click(object sender, EventArgs e)
         {
-           
-            try
-            {
-                cn.Open();
-                cm.Connection = cn;
-                adapter = new SqlDataAdapter("select * from Categoria where Id='"+IdTextBox.Text+"'",cn);
-                adapter.Fill(dt);
 
-
-            }
-            catch (Exception )
-            {
-                throw;
-            }
-            finally
-            {
-                cn.Close();
-            }
-            PeliculaDataGridView.DataSource = dt;
+            Categoria c = new Categoria();
+            c.CategoriaId = Convert.ToInt32(IdTextBox.Text);
+            PeliculaDataGridView.DataSource = c.Buscar();
             IdTextBox.Clear();
-            
+
 
 
         }
 
         private void ActulizarButton_Click(object sender, EventArgs e)
         {
-            
-            try
-            {
-                cn.Open();
-                cm.Connection = cn;
-                adapter = new SqlDataAdapter("Update Categoria set Descripcion='"+DescripcionRichTextBox.Text+"'  where Id='"+IdTextBox.Text+ "'",cn);
-                adapter.Fill(dt);
 
-
-            }
-            catch (Exception )
-            {
-                throw;
-            }
-            finally
-            {
-                cn.Close();
-            }
-           
+            Categoria c = new Categoria();
+            c.CategoriaId = Convert.ToInt32(IdTextBox.Text);
+            c.Descripcion = DescripcionRichTextBox.Text;
+            PeliculaDataGridView.DataSource = c.Actualizar();
             IdTextBox.Clear();
             DescripcionRichTextBox.Clear();
+
             MessageBox.Show("La base de dato ha sido actualizada");
-            
+
 
         }
 
         private void EliminarButton_Click(object sender, EventArgs e)
         {
-            PeliculaDataGridView.ClearSelection();
-            try
-            {
-                cn.Open();
-                cm.Connection = cn;
-                adapter = new SqlDataAdapter("delete from  Categoria where Id='" + IdTextBox.Text + "'", cn);
-                adapter.Fill(dt);
-
-
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                cn.Close();
-            }
+            Categoria c = new Categoria();
+            c.CategoriaId = Convert.ToInt32(IdTextBox.Text);
+            c.Eliminar();
             MessageBox.Show("Se eleminado la categoria");
 
             IdTextBox.Clear();
             DescripcionRichTextBox.Clear();
-           
+
+
         }
     }
-    }
+}
 
